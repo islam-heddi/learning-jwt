@@ -20,18 +20,19 @@ app.get('/',(req,res) => {
     res.send("Hello World")
 })
 
-app.post('/login',(req,res) => {
+app.post('/login',async (req,res) => {
     const {email, password} = req.body;
     try{
         const user = db.find(user => user.email == email)
 
         if(!user) throw new Error('user not found')
-        const pwd = compare(password,user.password)
+        const pwd = await compare(password,user.password)
         if(!pwd) throw new Error('Password does not match')
+        jwt.send({data: 'logged',expriresIn: '2s'},ACCESSTOKENKEY)
         res.send('Logged succefully ')
     }catch(err){
         res.send({
-            error:err
+            error: err
         })
     }
 })
