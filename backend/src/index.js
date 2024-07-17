@@ -4,7 +4,8 @@ const app = express()
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const {hash, compare} = require('bcryptjs')
-const {verify} = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
+const {db} = require('./db.js')
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -20,11 +21,40 @@ app.get('/',(req,res) => {
 })
 
 app.post('/login',(req,res) => {
-
+    const {email, password} = req.body;
+    try{
+        const user = db.push(user => user.email == email)
+        console.log(JSON.parse(user))
+        //const pwd = db.push(user => password == user.password)
+        if(!user) throw new Error('user not found')
+        //if(!pwd) throw new Error('Password does not match')
+        res.send('Logged succefully '+user)
+    }catch(err){
+        console.log({
+            error:err
+        })
+    }
 })
 
-app.post('/register',(req,res) => {
-    
+app.post('/register', async (req,res) => {
+    const {email , password , name} = req.body;
+
+    try{
+        const user = db.find(user => user.email == email)
+        if(user) throw new Error('email exists')
+        const hashedPassword = await hash(password,10)
+        db.push({
+            id: db.length,
+            name,
+            email,
+            password:hashedPassword,
+        })
+        res.send(JSON.stringify(db))
+    }catch(err){
+        res.send({
+            error: err
+        })
+    }
 })
 
 app.listen(process.env.PORT, () => {
