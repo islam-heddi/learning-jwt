@@ -23,14 +23,14 @@ app.get('/',(req,res) => {
 app.post('/login',(req,res) => {
     const {email, password} = req.body;
     try{
-        const user = db.push(user => user.email == email)
-        console.log(JSON.parse(user))
-        //const pwd = db.push(user => password == user.password)
+        const user = db.find(user => user.email == email)
+
         if(!user) throw new Error('user not found')
-        //if(!pwd) throw new Error('Password does not match')
-        res.send('Logged succefully '+user)
+        const pwd = compare(password,user.password)
+        if(!pwd) throw new Error('Password does not match')
+        res.send('Logged succefully ')
     }catch(err){
-        console.log({
+        res.send({
             error:err
         })
     }
