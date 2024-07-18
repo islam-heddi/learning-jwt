@@ -28,11 +28,14 @@ app.post('/login',async (req,res) => {
         if(!user) throw new Error('user not found')
         const pwd = await compare(password,user.password)
         if(!pwd) throw new Error('Password does not match')
-        jwt.send({data: 'logged',expriresIn: '2s'},ACCESSTOKENKEY)
+        const token = jwt.sign({data: 'foobar'},process.env.ACCESSTOKENKEY,{expiresIn: '1h'},(err,token) => {
+            if(err) throw new Error(err)
+            else console.log(token)
+         })
         res.send('Logged succefully ')
     }catch(err){
         res.send({
-            error: err
+            error: err.message
         })
     }
 })
