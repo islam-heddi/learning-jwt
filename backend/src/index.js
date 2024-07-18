@@ -32,12 +32,34 @@ app.post('/login',async (req,res) => {
             if(err) throw new Error(err)
             else console.log(token)
          })
-        res.send('Logged succefully ')
+        res.send('Logged succefully')
     }catch(err){
         res.send({
             error: err.message
         })
     }
+})
+
+const authenticateJWT = (req,res,next) => {
+    const authHEADER = req.headers.authorization;
+    if(authHEADER) {
+        const token = authHEADER.split(' ')[1]
+
+        jwt.verify(token,ACCESSTOKENKEY,(err,user) => {
+            if(err) {
+                return res.sendStatus(403)
+            }
+
+            req.user = user;
+            next()
+        })
+    }else{
+        res.sendStatus(401)
+    }
+}
+
+app.get('/protected',authenticateJWT,(req,res) => {
+    res.json({ message: 'This is a protected route', user: req.user });
 })
 
 app.post('/register', async (req,res) => {
