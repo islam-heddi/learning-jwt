@@ -78,7 +78,7 @@ app.post('/register', async (req,res) => {
         res.send(JSON.stringify(db))
     }catch(err){
         res.send({
-            error: err
+            error: err.message
         })
     }
 })

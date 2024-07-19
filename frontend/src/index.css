@@ -16,6 +16,7 @@ button{
   color: white;
   background-color: black;
   margin: 5px;
+  cursor: pointer;
 }
 
 button:hover{
@@ -25,4 +26,8 @@ button:hover{
 .rd{
   cursor: pointer;
   text-decoration: underline; 
+}
+
+.error{
+  color: red;
 }
