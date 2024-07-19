@@ -1,0 +1,28 @@
+* {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+main form{
+  display: flex;
+  flex-direction: column;
+  > input{
+    padding: 12px;
+    font-size: 20px;
+  }
+}
+
+button{
+  padding: 12px;
+  color: white;
+  background-color: black;
+  margin: 5px;
+}
+
+button:hover{
+  background-color: rgba(0, 0, 0, 0.508);
+}
+
+.rd{
+  cursor: pointer;
+  text-decoration: underline; 
+}
