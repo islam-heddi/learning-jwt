@@ -6,6 +6,8 @@ function Login(props){
     const [password,setPassword] = useState('')
     const [data,setData] = useState([])
     const [isInprofile,setIsInprofile] = useState(false)
+    const [name,setName] = useState("")
+    const [id,setId] = useState(null)
 
     const HandleEmail = (e) => {
         setEmail(e.target.value)
@@ -30,8 +32,11 @@ function Login(props){
         .then((Response) => {
             console.log(Response)
             setData(Response.data)
-            if(!data.message){
+            if(data.error) return;
+            else {
                 setIsInprofile(true)
+                setName(Response.data.user.name)
+                setId(Response.data.user.id)
             }
         })
         .catch(
@@ -43,11 +48,20 @@ function Login(props){
         props.setInMain(true)
     }
 
+    const HandleDeconnect = () => {
+        setIsInprofile(false)
+        setName('')
+        setId(null)
+        setEmail('')
+        setPassword('')
+    }
+
     const profile = <div>
         <h1>Congratulation. You've entered successfully</h1>
-        <p>The name : {data.user.name}</p>
-        <p>The email : {data.user.email}</p>
-        <p>The id : {data.user.id}</p> 
+        <p>The name : {name || "default name"}</p>
+        <p>The email : {email}</p>
+        <p>The id : {id}</p>
+        <button onClick={HandleDeconnect}>Deconnect</button> 
     </div>
 
     const login = <>
@@ -57,11 +71,11 @@ function Login(props){
                 <label>
                     Email
                 </label>
-                <input type="email" value={email} onChange={(e) => HandleEmail(e)} placeholder="Enter your email"/>
+                <input type="email" value={email} onChange={(e) => HandleEmail(e)} placeholder="Enter your email" required/>
                 <label>
                     Password
                 </label>
-                <input type="password" value={password} onChange={(e) => HandlePassword(e)} placeholder="*************" />
+                <input type="password" value={password} onChange={(e) => HandlePassword(e)} placeholder="*************" required/>
                 <button>
                     Submit
                 </button>
