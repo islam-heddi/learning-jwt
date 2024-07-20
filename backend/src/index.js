@@ -32,7 +32,7 @@ app.post('/login',async (req,res) => {
             if(err) throw new Error(err)
             else console.log(token)
          })
-        res.send('Logged succefully')
+        res.send({message : 'Logged succefully', user:user})
     }catch(err){
         res.send({
             error: err.message
