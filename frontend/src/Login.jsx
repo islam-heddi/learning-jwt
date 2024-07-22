@@ -22,12 +22,15 @@ function Login(props){
         setPassword('')
     }
 
+    axios.defaults.withCredentials = true
+    
     const HandleSubmit = (e) => {
         e.preventDefault()
         const information = {
             email: email,
             password: password
         }
+        
         axios.post('http://localhost:5000/login',information)
         .then((Response) => {
             console.log(Response)

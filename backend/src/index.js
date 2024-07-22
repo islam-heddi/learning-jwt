@@ -9,7 +9,8 @@ const {db} = require('./db.js')
 
 app.use(cors({
     origin: 'http://localhost:5173',
-    credentials: true
+    credentials: true,
+    methods: ['GET','POST','PUT','DELETE'],
 }))
 app.use(cookieParser())
 app.use(express.json())
@@ -28,13 +29,11 @@ app.post('/login',async (req,res) => {
         if(!user) throw new Error('user not found')
         const pwd = await compare(password,user.password)
         if(!pwd) throw new Error('Password does not match')
-        const token = jwt.sign({data: 'foobar'},process.env.ACCESSTOKENKEY,{expiresIn: '1h'},(err,token) => {
-            if(err) throw new Error(err)
-            else console.log(token)
-         })
-        res.send({message : 'Logged succefully', user:user})
+        const token = jwt.sign({data: 'foobar'},process.env.ACCESSTOKENKEY,{expiresIn: '1h'})
+         res.cookie("token",token)
+        return res.send({message : 'Logged succefully', user:user})
     }catch(err){
-        res.send({
+        return res.send({
             error: err.message
         })
     }
